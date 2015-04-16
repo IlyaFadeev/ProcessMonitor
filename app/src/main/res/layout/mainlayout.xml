@@ -3,20 +3,4 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent" android:id="@+id/lin">
-
-    <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/scrollView" >
-        <HorizontalScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/horizontalScrollView">
-            <TableLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" android:layout_gravity="center_horizontal"
-                    android:id="@+id/processTable">
-            </TableLayout>
-        </HorizontalScrollView>
-    </ScrollView>
 </LinearLayout>

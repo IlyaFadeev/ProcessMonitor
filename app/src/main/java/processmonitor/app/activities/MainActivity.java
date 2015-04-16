@@ -3,15 +3,23 @@ package processmonitor.app.activities;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.*;
 import processmonitor.app.R;
 import processmonitor.app.activities.process.ProcessMonitor;
+import processmonitor.app.activities.process.SamplePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 
 /**
@@ -23,7 +31,7 @@ public class MainActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainlayout);
-        processTable = (TableLayout) findViewById(R.id.processTable);
+        /*processTable = (TableLayout) findViewById(R.id.processTable);
         processTable.setStretchAllColumns(true);
         processTable.setColumnShrinkable(4, true);
         TableRow row = new TableRow(this);
@@ -79,7 +87,27 @@ public class MainActivity extends Activity {
             rows.addView(currPKG);
             processTable.addView(rows);
             packL = "";
-        }
+        }*/
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
 
+        View page = inflater.inflate(R.layout.page, null);
+        TextView tv = new TextView(this);
+        tv.setBackgroundColor(Color.GRAY);
+        tv.setWidth(1000);
+        tv.setText("Page 1");
+        ((RelativeLayout) page).addView(tv);
+        pages.add(page);
+
+
+
+
+
+        SamplePagerAdapter pagerAdapter = new SamplePagerAdapter(pages);
+        ViewPager viewPager = new ViewPager(this);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
+
+        setContentView(viewPager);
     }
 }
