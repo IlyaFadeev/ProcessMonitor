@@ -31,76 +31,65 @@ public class MainActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainlayout);
-        /*processTable = (TableLayout) findViewById(R.id.processTable);
-        processTable.setStretchAllColumns(true);
-        processTable.setColumnShrinkable(4, true);
-        TableRow row = new TableRow(this);
-        TextView name = new TextView(this);
-        name.setText("Name");
-        name.setGravity(Gravity.CENTER);
-        name.setTypeface(Typeface.SERIF, Typeface.BOLD);
-        TextView pid = new TextView(this);
-        pid.setText("PID");
-        pid.setGravity(Gravity.CENTER);
-        pid.setTypeface(Typeface.SERIF, Typeface.BOLD);
-        TextView packages = new TextView(this);
-        packages.setText("Packages");
-        packages.setGravity(Gravity.CENTER);
-        packages.setTypeface(Typeface.SERIF, Typeface.BOLD);
-        TextView time = new TextView(this);
-        time.setText("Time");
-        time.setGravity(Gravity.CENTER);
-        time.setTypeface(Typeface.SERIF, Typeface.BOLD);
-        row.addView(name);
-        row.addView(pid);
-        row.addView(packages);
-        row.addView(time);
-        processTable.addView(row);
-        processTable.computeScroll();
 
-        //Get processes
         ProcessMonitor monitor = new ProcessMonitor();
         List<ActivityManager.RunningAppProcessInfo> processes = monitor.getProcesses(this);
         String[] pack;
         String packL = "";
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
+        // Process monitor
+        View page = inflater.inflate(R.layout.page, null);
+        View scrollView = inflater.inflate(R.layout.scroll,null);
+        LinearLayout cont = (LinearLayout) scrollView.findViewById(R.id.scroll_container);
+        TextView tv;
+        float y = 0;
         for (int i = 0; i < processes.size(); i++) {
-            TableRow rows = new TableRow(this);
-            TextView currName = new TextView(this);
-            currName.setGravity(Gravity.CENTER);
-            currName.setTypeface(Typeface.SERIF, Typeface.BOLD);
-            TextView currPID = new TextView(this);
-            currPID.setGravity(Gravity.CENTER);
-            currPID.setTypeface(Typeface.SERIF, Typeface.BOLD);
-            TextView currPKG = new TextView(this);
-            currPKG.setGravity(Gravity.CENTER);
-            currPKG.setTypeface(Typeface.SERIF, Typeface.BOLD);
-            currName.setText(processes.get(i).processName);
-            currPID.setText(String.valueOf(processes.get(i).pid));
             pack = processes.get(i).pkgList;
             for (int j = 0; j < pack.length; j++) {
                 packL += pack[j];
                 packL += ';';
             }
-            currPKG.setText(packL);
-            rows.addView(currName);
-            rows.addView(currPID);
-            rows.addView(currPKG);
-            processTable.addView(rows);
-            packL = "";
-        }*/
-        LayoutInflater inflater = LayoutInflater.from(this);
-        List<View> pages = new ArrayList<View>();
+             tv = new TextView(this);
+            tv.setBackgroundColor(Color.GREEN);
+            tv.setWidth(1000);
+            tv.setY(y);
+            tv.setText("Name: " + processes.get(i).processName + "\n"
+                            + "PID: " + String.valueOf(processes.get(i).pid) + "\n"
+                            + "Packages: " + packL
+            );
 
-        View page = inflater.inflate(R.layout.page, null);
-        TextView tv = new TextView(this);
+            cont.addView(tv);
+            y += 5;
+            packL = "";
+        }
+        tv = new TextView(this);
+        tv.setBackgroundColor(Color.WHITE);
+        tv.setWidth(1000);
+        tv.setHeight(80);
+        tv.setY(y);
+        cont.addView(tv);
+        ((RelativeLayout)page).addView((ScrollView)scrollView);
+        pages.add(page);
+
+        // Task monitor
+        page = inflater.inflate(R.layout.page, null);
+        tv = new TextView(this);
         tv.setBackgroundColor(Color.GRAY);
         tv.setWidth(1000);
-        tv.setText("Page 1");
+        tv.setText("Page 2");
         ((RelativeLayout) page).addView(tv);
         pages.add(page);
 
-
-
+        // Service monitor
+        page = inflater.inflate(R.layout.page, null);
+        tv = new TextView(this);
+        tv.setBackgroundColor(Color.GRAY);
+        tv.setWidth(1000);
+        tv.setText("Page 3 \n" +
+                "dlkvj");
+        ((RelativeLayout) page).addView(tv);
+        pages.add(page);
 
 
         SamplePagerAdapter pagerAdapter = new SamplePagerAdapter(pages);
