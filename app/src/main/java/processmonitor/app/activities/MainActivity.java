@@ -2,24 +2,18 @@ package processmonitor.app.activities;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import processmonitor.app.R;
-import processmonitor.app.activities.process.ProcessMonitor;
+import processmonitor.app.activities.process.SystemMonitor;
 import processmonitor.app.activities.process.SamplePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 
 /**
@@ -32,7 +26,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainlayout);
 
-        ProcessMonitor monitor = new ProcessMonitor();
+        SystemMonitor monitor = new SystemMonitor();
         List<ActivityManager.RunningAppProcessInfo> processes = monitor.getProcesses(this);
         String[] pack;
         String packL = "";
@@ -63,16 +57,18 @@ public class MainActivity extends Activity {
             y += 5;
             packL = "";
         }
+
         tv = new TextView(this);
         tv.setBackgroundColor(Color.WHITE);
         tv.setWidth(1000);
         tv.setHeight(80);
         tv.setY(y);
         cont.addView(tv);
-        ((RelativeLayout)page).addView((ScrollView)scrollView);
+        ((RelativeLayout)page).addView((ScrollView) scrollView);
         pages.add(page);
-
+        y = 0;
         // Task monitor
+        List<ActivityManager.RunningTaskInfo> tasks = monitor.getTasks(this);
         page = inflater.inflate(R.layout.page, null);
         tv = new TextView(this);
         tv.setBackgroundColor(Color.GRAY);
@@ -82,13 +78,26 @@ public class MainActivity extends Activity {
         pages.add(page);
 
         // Service monitor
+        List<ActivityManager.RunningServiceInfo> services = monitor.getServices(this);
         page = inflater.inflate(R.layout.page, null);
+        scrollView = inflater.inflate(R.layout.scroll,null);
+        cont = (LinearLayout) scrollView.findViewById(R.id.scroll_container);
+        for (int i = 0; i < services.size(); i++) {
+            tv = new TextView(this);
+            tv.setBackgroundColor(Color.BLUE);
+            tv.setWidth(1000);
+            tv.setY(y);
+            tv.setText(services.get(i).process);
+            cont.addView(tv);
+            y += 5;
+        }
         tv = new TextView(this);
-        tv.setBackgroundColor(Color.GRAY);
+        tv.setBackgroundColor(Color.WHITE);
         tv.setWidth(1000);
-        tv.setText("Page 3 \n" +
-                "dlkvj");
-        ((RelativeLayout) page).addView(tv);
+        tv.setHeight(70);
+        tv.setY(y);
+        cont.addView(tv);
+        ((RelativeLayout)page).addView((ScrollView)scrollView);
         pages.add(page);
 
 
