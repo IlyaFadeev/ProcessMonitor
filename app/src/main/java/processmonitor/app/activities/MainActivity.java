@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
             }
              tv = new TextView(this);
             tv.setBackgroundColor(Color.GREEN);
-            tv.setWidth(1000);
+            tv.setWidth(2000);
             tv.setY(y);
             tv.setText("Name: " + processes.get(i).processName + "\n"
                             + "PID: " + String.valueOf(processes.get(i).pid) + "\n"
@@ -61,21 +61,28 @@ public class MainActivity extends Activity {
         tv = new TextView(this);
         tv.setBackgroundColor(Color.WHITE);
         tv.setWidth(1000);
-        tv.setHeight(80);
+        tv.setHeight(115);
         tv.setY(y);
         cont.addView(tv);
         ((RelativeLayout)page).addView((ScrollView) scrollView);
         pages.add(page);
         y = 0;
         // Task monitor
-        List<ActivityManager.RunningTaskInfo> tasks = monitor.getTasks(this);
+        List<ActivityManager.AppTask> tasks = monitor.getTasks(this);
         page = inflater.inflate(R.layout.page, null);
-        tv = new TextView(this);
-        tv.setBackgroundColor(Color.GRAY);
-        tv.setWidth(1000);
-        tv.setText("Page 2");
-        ((RelativeLayout) page).addView(tv);
+        scrollView = inflater.inflate(R.layout.scroll,null);
+        cont = (LinearLayout) scrollView.findViewById(R.id.scroll_container);
+        for (int i = 0; i < tasks.size(); i++) {
+            tv = new TextView(this);
+            tv.setBackgroundColor(Color.GRAY);
+            tv.setWidth(2000);
+            tv.setText(tasks.get(i).toString());
+            cont.addView(tv);
+            y += 5;
+        }
+        ((RelativeLayout)page).addView((ScrollView) scrollView);
         pages.add(page);
+        y = 0;
 
         // Service monitor
         List<ActivityManager.RunningServiceInfo> services = monitor.getServices(this);
@@ -85,7 +92,7 @@ public class MainActivity extends Activity {
         for (int i = 0; i < services.size(); i++) {
             tv = new TextView(this);
             tv.setBackgroundColor(Color.BLUE);
-            tv.setWidth(1000);
+            tv.setWidth(2000);
             tv.setY(y);
             tv.setText(services.get(i).process);
             cont.addView(tv);
@@ -93,8 +100,8 @@ public class MainActivity extends Activity {
         }
         tv = new TextView(this);
         tv.setBackgroundColor(Color.WHITE);
-        tv.setWidth(1000);
-        tv.setHeight(70);
+        tv.setWidth(2000);
+        tv.setHeight(50);
         tv.setY(y);
         cont.addView(tv);
         ((RelativeLayout)page).addView((ScrollView)scrollView);

@@ -2,7 +2,7 @@ package processmonitor.app.activities.process;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
+import android.content.pm.PackageManager;
 
 import java.util.List;
 
@@ -18,12 +18,12 @@ public class SystemMonitor {
         return process;
     }
 
-    public List<ActivityManager.RunningTaskInfo> getTasks(Activity activity)
+    public List<ActivityManager.AppTask> getTasks(Activity activity)
     {
 
         ActivityManager manager = (ActivityManager) activity.getSystemService(Activity.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> process;
-            process = manager.getRunningTasks(100);
+        List<ActivityManager.AppTask> process;
+            process = manager.getAppTasks();
         return process;
     }
 
