@@ -3,8 +3,11 @@ package processmonitor.app.activities;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -25,7 +28,10 @@ public class MainActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainlayout);
-
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
         SystemMonitor monitor = new SystemMonitor();
         List<ActivityManager.RunningAppProcessInfo> processes = monitor.getProcesses(this);
         String[] pack;
@@ -37,36 +43,34 @@ public class MainActivity extends Activity {
         View scrollView = inflater.inflate(R.layout.scroll,null);
         LinearLayout cont = (LinearLayout) scrollView.findViewById(R.id.scroll_container);
         TextView tv;
-        float y = 0;
-        for (int i = 0; i < processes.size(); i++) {
-            pack = processes.get(i).pkgList;
-            for (int j = 0; j < pack.length; j++) {
-                packL += pack[j];
-                packL += ';';
+            float y = 0;
+            for (int i = 0; i < processes.size(); i++) {
+                pack = processes.get(i).pkgList;
+                for (int j = 0; j < pack.length; j++) {
+                    packL += pack[j];
+                    packL += ';';
+                }
+                tv = new TextView(this);
+                tv.setBackgroundColor(Color.parseColor("#013220"));
+                tv.setWidth(width);
+                tv.setText("Name: " + processes.get(i).processName + "\n"
+                                + "PID: " + String.valueOf(processes.get(i).pid) + "\n"
+                                + "Packages: " + packL
+                );
+                TextView splitter = new TextView(this);
+                splitter.setHeight(5);
+                splitter.setWidth(width);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                splitter.setBackgroundColor(Color.parseColor("#008080"));
+                cont.addView(tv);
+                cont.addView(splitter);
+                packL = "";
             }
-             tv = new TextView(this);
-            tv.setBackgroundColor(Color.GREEN);
-            tv.setWidth(2000);
-            tv.setY(y);
-            tv.setText("Name: " + processes.get(i).processName + "\n"
-                            + "PID: " + String.valueOf(processes.get(i).pid) + "\n"
-                            + "Packages: " + packL
-            );
 
-            cont.addView(tv);
-            y += 5;
-            packL = "";
-        }
+            ((RelativeLayout) page).addView((ScrollView) scrollView);
+            pages.add(page);
+            y = 0;
 
-        tv = new TextView(this);
-        tv.setBackgroundColor(Color.WHITE);
-        tv.setWidth(1000);
-        tv.setHeight(115);
-        tv.setY(y);
-        cont.addView(tv);
-        ((RelativeLayout)page).addView((ScrollView) scrollView);
-        pages.add(page);
-        y = 0;
         // Task monitor
         List<ActivityManager.AppTask> tasks = monitor.getTasks(this);
         page = inflater.inflate(R.layout.page, null);
@@ -74,11 +78,16 @@ public class MainActivity extends Activity {
         cont = (LinearLayout) scrollView.findViewById(R.id.scroll_container);
         for (int i = 0; i < tasks.size(); i++) {
             tv = new TextView(this);
-            tv.setBackgroundColor(Color.GRAY);
-            tv.setWidth(2000);
+            tv.setBackgroundColor(Color.parseColor("#013220"));
+            tv.setWidth(width);
             tv.setText(tasks.get(i).toString());
+            TextView splitter = new TextView(this);
+            splitter.setHeight(5);
+            splitter.setWidth(width);
+            splitter.setBackgroundColor(Color.parseColor("#008080"));
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             cont.addView(tv);
-            y += 5;
+            cont.addView(splitter);
         }
         ((RelativeLayout)page).addView((ScrollView) scrollView);
         pages.add(page);
@@ -91,19 +100,17 @@ public class MainActivity extends Activity {
         cont = (LinearLayout) scrollView.findViewById(R.id.scroll_container);
         for (int i = 0; i < services.size(); i++) {
             tv = new TextView(this);
-            tv.setBackgroundColor(Color.BLUE);
-            tv.setWidth(2000);
-            tv.setY(y);
+            tv.setBackgroundColor(Color.parseColor("#013220"));
+            tv.setWidth(width);
             tv.setText(services.get(i).process);
+            TextView splitter = new TextView(this);
+            splitter.setHeight(5);
+            splitter.setWidth(width);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            splitter.setBackgroundColor(Color.parseColor("#008080"));
             cont.addView(tv);
-            y += 5;
+            cont.addView(splitter);
         }
-        tv = new TextView(this);
-        tv.setBackgroundColor(Color.WHITE);
-        tv.setWidth(2000);
-        tv.setHeight(50);
-        tv.setY(y);
-        cont.addView(tv);
         ((RelativeLayout)page).addView((ScrollView)scrollView);
         pages.add(page);
 
